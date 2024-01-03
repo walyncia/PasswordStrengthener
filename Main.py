@@ -3,9 +3,9 @@
 #ALGORITHM
 
 #1. Get a username 
-#2. Check if user in file 
-#3. If not, add username to file 
-#4. Prompt passworod from user W displayed rules 
+#2. Check if user in db 
+#3. If in db, end program. Ifnot, add username to db
+#4. Prompt passworod from user with displayed rules 
 #5. Check password against rules 
 #6. Give validation feedback to user 
 #7. If not, prompt user for a stronger password 
@@ -16,6 +16,8 @@
 
 import getpass #password function for command line usage
 import sys #running python in the command line
+import sqlite3 #store username data
+import hashlib #hashing the password
 
 def user_check(usrname): #user function
         #print(f"Parameter 1: {param1}") *DEBUG*
@@ -29,7 +31,7 @@ def password_Strengthener(passW): #password function
         
 if __name__ == "__main__":
     
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 2: #far too many arguments? FYI to user
         print("Usage: python myscript.py <param1>")
     else:
         # Get command-line arguments
