@@ -32,7 +32,7 @@ def password_Strengthener(passW): #password function
 if __name__ == "__main__":
     
     if len(sys.argv) != 2: #far too many arguments? FYI to user
-        print("Usage: python myscript.py <param1>")
+        print("Usage: python main.py username_Here")
     else:
         # Get command-line arguments
         usrname = sys.argv[1]
