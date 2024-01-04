@@ -21,13 +21,35 @@ import hashlib #hashing the password
 
 def user_check(usrname): #user function
         #print(f"Parameter 1: {param1}") *DEBUG*
-        if len(usrname) == 5: #check if username is stored in a file
-            return True
+        #Make connection to db
+        conn = sqlite3.connect('user_database.db')
+        cursor = conn.cursor()
+        
+        #if the username is in the file do this
+        #print(len(usrname)) *DEBUG*
+        
+        newName = (usrname,) #change len of the username to fit in parameterized query
+        #print(len(newName)) *DEBUG*
+        
+        #literal sql query to test logic
+        
+        #cursor.execute("SELECT * FROM users WHERE Username = 'MickeyMouse'") *DEBUG*
+        #rows = cursor.fetchall() *DEBUG*
+        #for row in rows: *DEBUG*
+            #print("LITERAL", row) *DEBUG*
+
+        cursor.execute("SELECT * FROM users WHERE Username = ?", newName)
+        rows = cursor.fetchall()
+        if len(rows) ==1:
+            conn.close() #close connection
+            return False #End Program
         else: 
-            return False 
+            conn.close() #close connection
+            return True #Request Password
+
         
 def password_Strengthener(passW): #password function
-    print(passW) #Add logic for password, maybe recursive function
+    print("WE'RE IN THE FUNCTION", passW) #Add logic for password, maybe recursive function
         
 if __name__ == "__main__":
     
@@ -37,8 +59,10 @@ if __name__ == "__main__":
         # Get command-line arguments
         usrname = sys.argv[1]
 
-        # Call the main function with the provided arguments
-        if user_check(usrname): #if the username is in the file do this
+        
+        if user_check(usrname): 
             print ("DONT")
+            passW = input("Password:") # get the password from the user
+            password_Strengthener(passW) #call the password function
         else: #if the username is not in the file, produce this message
             print (usrname + " not found. Try again.")
