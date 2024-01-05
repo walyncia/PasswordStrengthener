@@ -61,8 +61,9 @@ if __name__ == "__main__":
 
         
         if user_check(usrname): 
-            print ("DONT")
-            passW = input("Password:") # get the password from the user
+            print ("With username '"+ usrname +"'...")
+            print("FOLLOW THESE RULES")
+            passW = input("Enter a strong password:") # get the password from the user
             password_Strengthener(passW) #call the password function
         else: #if the username is not in the file, produce this message
-            print (usrname + " not found. Try again.")
+            print (usrname + " is already in our system! Thanks for supporting!")
