@@ -11,7 +11,7 @@
 #7. If not, prompt user for a stronger password 
 #8. Give validation feedback to user 
 #9. If not, repeat steps 5 and 6 
-#10. If, say password is OK
+#10. If, say password is OK and add username and password to the db
 #11. End program
 
 import getpass #password function for command line usage
@@ -79,7 +79,7 @@ if __name__ == "__main__":
                     print("\n\nLength: Between 8 and 64 characters \nspecial character:Use of at least one ie !@#$%^&*()-_+=,.?/:;{}[]~ \nUpper and Lowercase Characters: Use least one of each \nNumber: Use at least one")
                     passW = getpass.getpass("Enter a strong password:") # get the password from the user, using getpass
                     if password_Strengthener(passW):
-                        print("SAVED")
+                        print("SAVED") #TO DO add to db
                         choice = "no"
                     else:
                         choice = input("That password does not meet the requirements, would you like to try again? Yes or no.")
