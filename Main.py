@@ -38,9 +38,9 @@ def user_check(usrname): #user function
         #for row in rows: *DEBUG*
             #print("LITERAL", row) *DEBUG*
 
-        cursor.execute("SELECT * FROM users WHERE Username = ?", newName)
-        rows = cursor.fetchall()
-        if len(rows) ==1:
+        cursor.execute("SELECT * FROM users WHERE Username = ?", newName) #get data for username in the db
+        rows = cursor.fetchall() #recall data
+        if len(rows) ==1: #if there is data ...
             conn.close() #close connection
             return False #End Program
         else: 
@@ -49,8 +49,15 @@ def user_check(usrname): #user function
 
         
 def password_Strengthener(passW): #password function
-    print("WE'RE IN THE FUNCTION", passW) #Add logic for password, maybe recursive function
-        
+    if 8 <= len(passW) <= 64:
+        # Check for at least one uppercase, one lowercase, one digit, and one special character
+        if any(char.isupper() for char in passW) and \
+           any(char.islower() for char in passW) and \
+           any(char.isdigit() for char in passW) and \
+           any(char in "!@#$%^&*()-_+=,.?/:;{}[]~" for char in passW):
+            return True
+    return False
+
 if __name__ == "__main__":
     
     if len(sys.argv) != 2: #far too many arguments? FYI to user
@@ -61,9 +68,21 @@ if __name__ == "__main__":
 
         
         if user_check(usrname): 
-            print ("With username '"+ usrname +"'...")
-            print("FOLLOW THESE RULES")
-            passW = input("Enter a strong password:") # get the password from the user
-            password_Strengthener(passW) #call the password function
+            print ("With username '"+ usrname +"'... Submit a password with the following requirements")
+            print("\nLength: Between 8 and 64 characters \nspecial character:Use of at least one ie !@#$%^&*()-_+=,.?/:;{}[]~ \nUpper and Lowercase Characters: Use least one of each \nNumber: Use at least one")
+            passW = getpass.getpass("Enter a strong password:") # get the password from the user using getpass
+            if password_Strengthener(passW): #call the password function and save in DB
+                print("SAVED")
+            else: #option to try again or terminate the program
+                choice = input("That password does not meet the requirements, would you like to try again? Yes or no.")
+                while choice == "yes" or choice == "Yes":
+                    print("\n\nLength: Between 8 and 64 characters \nspecial character:Use of at least one ie !@#$%^&*()-_+=,.?/:;{}[]~ \nUpper and Lowercase Characters: Use least one of each \nNumber: Use at least one")
+                    passW = getpass.getpass("Enter a strong password:") # get the password from the user, using getpass
+                    if password_Strengthener(passW):
+                        print("SAVED")
+                        choice = "no"
+                    else:
+                        choice = input("That password does not meet the requirements, would you like to try again? Yes or no.")
+                        
         else: #if the username is not in the file, produce this message
             print (usrname + " is already in our system! Thanks for supporting!")
