@@ -55,8 +55,19 @@ def password_Strengthener(passW): #password function
            any(char.islower() for char in passW) and \
            any(char.isdigit() for char in passW) and \
            any(char in "!@#$%^&*()-_+=,.?/:;{}[]~" for char in passW):
-            return True
+               return True
     return False
+
+def write_to_db(usrname, password_hash):
+    #open connection to db
+    conn = sqlite3.connect('user_database.db')
+    cursor = conn.cursor()
+    #insert the username and hashed password
+    cursor.execute("INSERT INTO users (Username, PassW_hash) VALUES (?, ?)", (usrname, password_hash))
+    #commit and close the connection
+    conn.commit()
+    conn.close()
+    return True
 
 if __name__ == "__main__":
     
@@ -72,15 +83,19 @@ if __name__ == "__main__":
             print("\nLength: Between 8 and 64 characters \nspecial character:Use of at least one ie !@#$%^&*()-_+=,.?/:;{}[]~ \nUpper and Lowercase Characters: Use least one of each \nNumber: Use at least one")
             passW = getpass.getpass("Enter a strong password:") # get the password from the user using getpass
             if password_Strengthener(passW): #call the password function and save in DB
-                print("SAVED")
+                password_hash = hashlib.sha256(passW.encode()).hexdigest()
+                write_to_db(usrname, password_hash)
+                print ("\n\nCongratulations "+ usrname + ", you are now in our system! Thanks for supporting!")
             else: #option to try again or terminate the program
                 choice = input("That password does not meet the requirements, would you like to try again? Yes or no.")
                 while choice == "yes" or choice == "Yes":
                     print("\n\nLength: Between 8 and 64 characters \nspecial character:Use of at least one ie !@#$%^&*()-_+=,.?/:;{}[]~ \nUpper and Lowercase Characters: Use least one of each \nNumber: Use at least one")
-                    passW = getpass.getpass("Enter a strong password:") # get the password from the user, using getpass
+                    passW = getpass.getpass("\nEnter a strong password:") # get the password from the user, using getpass
                     if password_Strengthener(passW):
-                        print("SAVED") #TO DO add to db
+                        password_hash = hashlib.sha256(passW.encode()).hexdigest()
+                        write_to_db(usrname, password_hash) #insert into appDB
                         choice = "no"
+                        print ("\n\nCongratulations "+ usrname + ", you are now in our system! Thanks for supporting!")
                     else:
                         choice = input("That password does not meet the requirements, would you like to try again? Yes or no.")
                         
